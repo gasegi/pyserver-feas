@@ -1,0 +1,27 @@
+version: "3"
+services:
+  server:
+    container_name: server
+    build: ./container/server
+    volumes:
+      - ./app/server:/var/www/html
+    ports:
+      - "9004:9004"
+    # command: uvicorn main:app --reload --host 0.0.0.0 --port 9004 --reload
+
+  db:
+    image: mysql:5.7
+    container_name: db
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test_database
+      # MYSQL_USER: root
+      # MYSQL_PASSWORD: root
+      TZ: "Asia/Tokyo"
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      # - ./container/db/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./app/db/mysql_data:/var/lib/mysql
+      - ./app/db/mysql_init:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
