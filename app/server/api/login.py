@@ -6,18 +6,10 @@ from fastapi import Depends, APIRouter, HTTPException, Request, Response, status
 from sqlalchemy.orm import Session
 
 # from app.user import crud, models
-from database.database import SessionLocal, engine
+from database.database import SessionLocal, engine, get_db
 from sql import staff
 
 router = APIRouter()
-
-
-def get_db():
-    try:
-        db = SessionLocal()
-        yield db
-    finally:
-        db.close()
 
 
 @router.get("/api/login")
@@ -36,6 +28,7 @@ async def login(
     print(password)
     # crypt.crypt user1=raM7IbozF4Awk
     # crypt.crypt usertest=raFF41zUzpYwU
+    # crypt.crypt usertest2=raM7IbozF4Awk
 
     result = db.execute(staff.login_sql.format(id))
     db.commit()
